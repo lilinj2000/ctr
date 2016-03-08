@@ -45,18 +45,18 @@ if test -d /llj/libs ; then
    home_libs=/llj/libs
 fi
 
-dnl soil lib
-AC_ARG_WITH([soil],
-    [AS_HELP_STRING([--with-soil],
-        [home path of the soil, defaults to $home_libs/soil])],
-    [SOIL_HOME="$withval"],
-    [SOIL_HOME="$home_libs/soil"])
-AC_SUBST([SOIL_HOME])
+dnl ssl lib
+AC_ARG_WITH([ssl],
+    [AS_HELP_STRING([--with-ssl],
+        [home path of the ssl, defaults to $home_3rd/ssl])],
+    [SSL_HOME="$withval"],
+    [SSL_HOME="$home_3rd/ssl"])
+AC_SUBST([SSL_HOME])
 
-SOIL_CPPFLAGS="-I$SOIL_HOME/include"
-SOIL_LIBADD="$SOIL_HOME/lib/libsoil.la"
-AC_SUBST(SOIL_CPPFLAGS)
-AC_SUBST(SOIL_LIBADD)
+SSL_CPPFLAGS=
+SSL_LIBADD="-L$SSL_HOME/lib64 -lssl -lcrypto"
+AC_SUBST(SSL_CPPFLAGS)
+AC_SUBST(SSL_LIBADD)
 
 dnl boost lib
 AC_ARG_WITH([boost],
@@ -105,6 +105,20 @@ GTEST_CPPFLAGS=-I$GTEST_HOME/include
 GTEST_LIBADD="$GTEST_HOME/lib/libgtest.a $GTEST_HOME/lib/libgtest_main.a"
 AC_SUBST(GTEST_CPPFLAGS)
 AC_SUBST(GTEST_LIBADD)
+
+dnl soil lib
+AC_ARG_WITH([soil],
+    [AS_HELP_STRING([--with-soil],
+        [home path of the soil, defaults to $home_libs/soil])],
+    [SOIL_HOME="$withval"],
+    [SOIL_HOME="$home_libs/soil"])
+AC_SUBST([SOIL_HOME])
+
+SOIL_CPPFLAGS="-I$SOIL_HOME/include"
+SOIL_LIBADD="$SOIL_HOME/lib/libsoil.la"
+AC_SUBST(SOIL_CPPFLAGS)
+AC_SUBST(SOIL_LIBADD)
+
 
 AC_OUTPUT([
 	Makefile

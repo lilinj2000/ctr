@@ -19,7 +19,13 @@ class CtrOptions : public soil::Options
 
   virtual po::options_description* configOptions();
 
+  std::string account;
+  std::string password;
+  
   std::string op_station;
+
+  std::string op_entrust_way;
+  
   std::string hs_config;
   
  private:

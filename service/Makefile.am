@@ -10,7 +10,8 @@ libctr_la_CPPFLAGS = -I$(top_srcdir) \
 
 libctr_la_LIBADD = $(CITICS_LIBADD) \
 		$(BOOST_LIBADD) \
-		$(SOIL_LIBADD)
+		$(SOIL_LIBADD) \
+		$(SSL_LIBADD)
 
 libctr_la_LDFLAGS = \
 	-no-undefined -version-info \
@@ -18,7 +19,7 @@ libctr_la_LDFLAGS = \
 	-release $(LT_RELEASE)
 
 # header files
-noinst_HEADERS = CtrLog.hh CtrOptions.hh CtrServiceImpl.hh
+noinst_HEADERS = CtrLog.hh CtrOptions.hh CtrServiceImpl.hh CtrDef.hh
 
 
 

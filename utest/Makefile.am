@@ -20,11 +20,12 @@ unittest_LDADD = \
 	../service/libctr.la \
 	$(BOOST_LIBADD) \
 	$(CITICS_LIBADD) \
-	$(SOIL_LIBADD)
+	$(SOIL_LIBADD) \
+	$(SSL_LIBADD)
 
 
 
-unittest_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread -lssl -lcrypto
+unittest_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread
 
 # header files
 noinst_HEADERS = 

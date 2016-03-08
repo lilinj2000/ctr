@@ -17,12 +17,28 @@ class CtrServiceImpl : public CtrService
 
   virtual ~CtrServiceImpl();
 
+ protected:
+  
+  void initHsApi();
+
+  void login();
+
+  std::string getHsError();
+
+  std::string showData();
+  
  private:
 
   CtrOptions* options_;
 
   HSHLPCFGHANDLE hs_config_;
   HSHLPHANDLE hs_handle_;
+
+  std::string client_id_;
+  std::string user_token_;
+  std::string branch_no_;
+  std::string asset_prop_;
+  std::string sysnode_id_;
 };
 
 

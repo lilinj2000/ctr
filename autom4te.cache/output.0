@@ -636,6 +636,9 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIB@&t@OBJS
+SOIL_LIBADD
+SOIL_CPPFLAGS
+SOIL_HOME
 GTEST_LIBADD
 GTEST_CPPFLAGS
 GTEST_HOME
@@ -645,9 +648,9 @@ CITICS_HOME
 BOOST_LIBADD
 BOOST_CPPFLAGS
 BOOST_HOME
-SOIL_LIBADD
-SOIL_CPPFLAGS
-SOIL_HOME
+SSL_LIBADD
+SSL_CPPFLAGS
+SSL_HOME
 LT_AGE
 LT_REVISION
 LT_CURRENT
@@ -783,10 +786,11 @@ enable_fast_install
 with_gnu_ld
 with_sysroot
 enable_libtool_lock
-with_soil
+with_ssl
 with_boost
 with_citics
 with_gtest
+with_soil
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1439,10 +1443,11 @@ Optional Packages:
   --with-gnu-ld           assume the C compiler uses GNU ld @<:@default=no@:>@
   --with-sysroot=DIR Search for dependent libraries within DIR
                         (or the compiler's sysroot if not specified).
-  --with-soil             home path of the soil, defaults to @S|@home_libs/soil
+  --with-ssl              home path of the ssl, defaults to @S|@home_3rd/ssl
   --with-boost            home path of the boost, defaults to @S|@home_3rd/boost
   --with-citics           path of the citics api, defaults to @S|@CITICS_HOME
   --with-gtest            home path of the gtest, defaults to @S|@home_3rd/gtest
+  --with-soil             home path of the soil, defaults to @S|@home_libs/soil
 
 Some influential environment variables:
   CXX         C++ compiler command
@@ -15120,17 +15125,17 @@ if test -d /llj/libs ; then
 fi
 
 
-@%:@ Check whether --with-soil was given.
-if test "${with_soil+set}" = set; then :
-  withval=$with_soil; SOIL_HOME="$withval"
+@%:@ Check whether --with-ssl was given.
+if test "${with_ssl+set}" = set; then :
+  withval=$with_ssl; SSL_HOME="$withval"
 else
-  SOIL_HOME="$home_libs/soil"
+  SSL_HOME="$home_3rd/ssl"
 fi
 
 
 
-SOIL_CPPFLAGS="-I$SOIL_HOME/include"
-SOIL_LIBADD="$SOIL_HOME/lib/libsoil.la"
+SSL_CPPFLAGS=
+SSL_LIBADD="-L$SSL_HOME/lib64 -lssl -lcrypto"
 
 
 
@@ -15185,6 +15190,22 @@ fi
 
 GTEST_CPPFLAGS=-I$GTEST_HOME/include
 GTEST_LIBADD="$GTEST_HOME/lib/libgtest.a $GTEST_HOME/lib/libgtest_main.a"
+
+
+
+
+@%:@ Check whether --with-soil was given.
+if test "${with_soil+set}" = set; then :
+  withval=$with_soil; SOIL_HOME="$withval"
+else
+  SOIL_HOME="$home_libs/soil"
+fi
+
+
+
+SOIL_CPPFLAGS="-I$SOIL_HOME/include"
+SOIL_LIBADD="$SOIL_HOME/lib/libsoil.la"
+
 
 
 

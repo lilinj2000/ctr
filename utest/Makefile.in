@@ -99,7 +99,7 @@ unittest_OBJECTS = $(am_unittest_OBJECTS)
 am__DEPENDENCIES_1 =
 unittest_DEPENDENCIES = $(am__DEPENDENCIES_1) ../service/libctr.la \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -292,6 +292,9 @@ SHELL = @SHELL@
 SOIL_CPPFLAGS = @SOIL_CPPFLAGS@
 SOIL_HOME = @SOIL_HOME@
 SOIL_LIBADD = @SOIL_LIBADD@
+SSL_CPPFLAGS = @SSL_CPPFLAGS@
+SSL_HOME = @SSL_HOME@
+SSL_LIBADD = @SSL_LIBADD@
 STRIP = @STRIP@
 VERSION = @VERSION@
 abs_builddir = @abs_builddir@
@@ -363,9 +366,10 @@ unittest_LDADD = \
 	../service/libctr.la \
 	$(BOOST_LIBADD) \
 	$(CITICS_LIBADD) \
-	$(SOIL_LIBADD)
+	$(SOIL_LIBADD) \
+	$(SSL_LIBADD)
 
-unittest_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread -lssl -lcrypto
+unittest_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread
 
 # header files
 noinst_HEADERS = 
