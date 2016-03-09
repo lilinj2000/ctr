@@ -57,6 +57,16 @@ TEST_F(CtrServiceImplTest, qryStockholderTest)
   ASSERT_TRUE( true );
 }
 
+TEST_F(CtrServiceImplTest, qryStockcodeTest)
+{
+  // std::string stock_code = "601398";
+  std::string stock_code = "000088";
+
+  service_->qryStockcode( stock_code );
+  
+  ASSERT_TRUE( true );
+}
+
 TEST_F(CtrServiceImplTest, qryFundTest)
 {
   service_->qryFund();

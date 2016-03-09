@@ -59,6 +59,30 @@ void CtrServiceImpl::qryStockholder()
 
 }
 
+void CtrServiceImpl::qryStockcode(const std::string& stock_code)
+{
+  CTR_TRACE <<"CtrServiceImpl::qryStockcode()";
+
+  setDefaultReqMsg();
+
+  CITICs_HsHlp_SetValue(hs_handle_, "stock_code", stock_code.data());
+  
+  int ret = CITICs_HsHlp_BizCallAndCommit(hs_handle_, QRY_STOCKCODE_FUNC, 0);
+  if( ret!=0 )
+  {
+    std::string err_msg = "query stockcode failed.\n" + getHsError();
+
+    throw std::runtime_error( err_msg );
+  }
+
+  rapidjson::Document doc;
+  fetchRspData( RSP_QRY_STOCKCODE, doc );
+  
+  CTR_DEBUG <<"query stockcode response: \n"
+            <<jsonToString( doc );
+
+}
+
 void CtrServiceImpl::qryFund()
 {
   CTR_TRACE <<"CtrServiceImpl::qryFund()";
@@ -303,6 +327,9 @@ std::string CtrServiceImpl::jsonToString(const rapidjson::Document& doc)
 
 void CtrServiceImpl::setDefaultReqMsg()
 {
+  if( rsp_login_[RSP_LOGIN].Empty() )
+    throw std::runtime_error("login response is wrong.");
+  
   rapidjson::Value& rsp_login_record = rsp_login_[RSP_LOGIN][0];
   
   CITICs_HsHlp_BeginParam(hs_handle_);

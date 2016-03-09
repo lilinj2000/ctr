@@ -8,6 +8,7 @@ enum
 {
   LOGIN_FUNC = 331100,
   QRY_STOCKHOLDER_FUNC = 331300,
+  QRY_STOCKCODE_FUNC = 330300,
   QRY_FUND_FUNC = 332255,
   QRY_ENTRUST_FUNC = 333101,
   ENTRUST_FUNC = 333002,
@@ -16,6 +17,7 @@ enum
 
 static const constexpr char* RSP_LOGIN = "LoginRsp";
 static const constexpr char* RSP_QRY_STOCKHOLDER = "QryStockholderRsp";
+static const constexpr char* RSP_QRY_STOCKCODE = "QryStockcodeRsp";
 static const constexpr char* RSP_QRY_FUND = "QryFundRsp";
 static const constexpr char* RSP_QRY_ENTRUST = "QryEntrustRsp";
 static const constexpr char* RSP_ENTRUST = "EntrustRsp";

@@ -20,6 +20,8 @@ class CtrServiceImpl : public CtrService
 
   virtual void qryStockholder();
 
+  virtual void qryStockcode(const std::string& stock_code);
+
   virtual void qryFund();
 
   virtual void qryEntrust(const std::string& entrust_no);

@@ -14,7 +14,9 @@ class CtrService
   }
 
   virtual void qryStockholder() = 0;
-
+  
+  virtual void qryStockcode(const std::string& stock_code) = 0;
+  
   virtual void qryFund() = 0;
 
   virtual void qryEntrust(const std::string& entrust_no) = 0;
