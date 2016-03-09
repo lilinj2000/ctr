@@ -4,6 +4,9 @@
 #include "CtrDef.hh"
 
 #include "soil/NumberToString.hh"
+#include "rapidjson/prettywriter.h"
+
+#include "boost/regex.hpp"
 
 namespace ctr
 {
@@ -33,6 +36,140 @@ CtrServiceImpl::~CtrServiceImpl()
   }
 
 }
+
+void CtrServiceImpl::qryStockholder()
+{
+  CTR_TRACE <<"CtrServiceImpl::qryStockholder()";
+
+  setDefaultReqMsg();
+
+  int ret = CITICs_HsHlp_BizCallAndCommit(hs_handle_, QRY_STOCKHOLDER_FUNC, 0);
+  if( ret!=0 )
+  {
+    std::string err_msg = "query stockholder failed.\n" + getHsError();
+
+    throw std::runtime_error( err_msg );
+  }
+
+  rapidjson::Document doc;
+  fetchRspData( RSP_QRY_STOCKHOLDER, doc );
+  
+  CTR_DEBUG <<"query stockholder response: \n"
+            <<jsonToString( doc );
+
+}
+
+void CtrServiceImpl::qryFund()
+{
+  CTR_TRACE <<"CtrServiceImpl::qryFund()";
+
+  setDefaultReqMsg();
+
+  int ret = CITICs_HsHlp_BizCallAndCommit(hs_handle_, QRY_FUND_FUNC, 0);
+  if( ret!=0 )
+  {
+    std::string err_msg = "query fund failed.\n" + getHsError();
+
+    throw std::runtime_error( err_msg );
+  }
+
+  rapidjson::Document doc;
+  fetchRspData( RSP_QRY_FUND, doc );
+  
+  CTR_DEBUG <<"query fund response: \n"
+            <<jsonToString( doc );
+
+}
+
+void CtrServiceImpl::qryEntrust(const std::string& entrust_no)
+{
+  CTR_TRACE <<"CtrServiceImpl::qryEntrust()";
+
+  setDefaultReqMsg();
+
+  CITICs_HsHlp_SetValue(hs_handle_, "locate_entrust_no", entrust_no.data());
+
+  int ret = CITICs_HsHlp_BizCallAndCommit(hs_handle_, QRY_ENTRUST_FUNC, 0);
+  if( ret!=0 )
+  {
+    std::string err_msg = "query entrust failed.\n" + getHsError();
+
+    throw std::runtime_error( err_msg );
+  }
+
+  rapidjson::Document doc;
+  fetchRspData( RSP_QRY_ENTRUST, doc );
+  
+  CTR_DEBUG <<"query entrust response: \n"
+            <<jsonToString( doc );
+
+}
+
+
+void CtrServiceImpl::entrust(const std::string& stock_code,
+                             int amount,
+                             double price,
+                             bool buy)
+{
+  CTR_TRACE <<"CtrServiceImpl::entrust()";
+
+  setDefaultReqMsg();
+
+  CITICs_HsHlp_SetValue(hs_handle_, "exchange_type", toExchange(stock_code).data());
+  CITICs_HsHlp_SetValue(hs_handle_, "stock_code", stock_code.data());
+  CITICs_HsHlp_SetValue(hs_handle_, "entrust_amount", soil::numToString(amount).data());
+  CITICs_HsHlp_SetValue(hs_handle_, "entrust_price", soil::numToString(price).data());
+  if( buy )
+    CITICs_HsHlp_SetValue(hs_handle_, "entrust_bs", "1");
+  else
+    CITICs_HsHlp_SetValue(hs_handle_, "entrust_bs", "2");
+  
+  CITICs_HsHlp_SetValue(hs_handle_, "entrust_prop", "0");
+  CITICs_HsHlp_SetValue(hs_handle_, "batch_no", "0");
+  CITICs_HsHlp_SetValue(hs_handle_, "entrust_type", "0");
+
+  int ret = CITICs_HsHlp_BizCallAndCommit(hs_handle_, ENTRUST_FUNC, 0);
+  if( ret!=0 )
+  {
+    std::string err_msg = "entrust failed.\n" + getHsError();
+
+    throw std::runtime_error( err_msg );
+  }
+
+  rapidjson::Document doc;
+  fetchRspData( RSP_ENTRUST, doc );
+  
+  CTR_DEBUG <<"entrust response: \n"
+            <<jsonToString( doc );
+
+}
+
+void CtrServiceImpl::cancelEntrust(const std::string& entrust_no)
+{
+  CTR_TRACE <<"CtrServiceImpl::cancelEntrust()";
+
+  setDefaultReqMsg();
+
+  CITICs_HsHlp_SetValue(hs_handle_, "entrust_no", entrust_no.data());
+  CITICs_HsHlp_SetValue(hs_handle_, "batch_flag", "0");
+  CITICs_HsHlp_SetValue(hs_handle_, "locate_entrust_no", entrust_no.data());
+        
+  int ret = CITICs_HsHlp_BizCallAndCommit(hs_handle_, CANCEL_ENTRUST_FUNC, 0);
+  if( ret!=0 )
+  {
+    std::string err_msg = "cancel entrust failed.\n" + getHsError();
+
+    throw std::runtime_error( err_msg );
+  }
+
+  rapidjson::Document doc;
+  fetchRspData( RSP_CANCEL_ENTRUST, doc );
+  
+  CTR_DEBUG <<"cancel entrust response: \n"
+            <<jsonToString( doc );
+
+}
+
 
 void CtrServiceImpl::initHsApi()
 {
@@ -80,7 +217,7 @@ void CtrServiceImpl::login()
   CITICs_HsHlp_SetValue(hs_handle_, "account_content", options_->account.data());
   CITICs_HsHlp_SetValue(hs_handle_, "op_station", options_->op_station.data());
 
-  int ret = CITICs_HsHlp_BizCallAndCommit(hs_handle_, login_function, 0);
+  int ret = CITICs_HsHlp_BizCallAndCommit(hs_handle_, LOGIN_FUNC, 0);
   if( ret!=0 )
   {
     std::string err_msg = "login failed.\n" + getHsError();
@@ -88,26 +225,10 @@ void CtrServiceImpl::login()
     throw std::runtime_error( err_msg );
   }
 
-  CTR_DEBUG <<"login response: \n" <<showData();
+  fetchRspData( RSP_LOGIN, rsp_login_ );
   
-  char msg[512];
-  memset(msg, 0x0, sizeof(msg));
-  
-  CITICs_HsHlp_GetValue(hs_handle_, "client_id", msg);
-  client_id_ = msg;
-  
-  CITICs_HsHlp_GetValue(hs_handle_, "user_token", msg);
-  user_token_ = msg;
-  
-  CITICs_HsHlp_GetValue(hs_handle_, "branch_no", msg);
-  branch_no_ = msg;
-  
-  CITICs_HsHlp_GetValue(hs_handle_, "asset_prop", msg);
-  asset_prop_ = msg;
-  
-  CITICs_HsHlp_GetValue(hs_handle_, "sysnode_id", msg);
-  sysnode_id_ = msg;
-
+  CTR_DEBUG <<"login response: \n"
+            <<jsonToString( rsp_login_ );
 }
 
 std::string CtrServiceImpl::getHsError()
@@ -124,9 +245,12 @@ std::string CtrServiceImpl::getHsError()
   return err_msg;
 }
 
-std::string CtrServiceImpl::showData()
+void CtrServiceImpl::fetchRspData(const std::string& rsp, rapidjson::Document& doc)
 {
-  std::stringstream sstream;
+  rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+
+  rapidjson::Value rsp_key;
+  rsp_key.SetString(rsp.data(), rsp.length(), allocator);
   
   int row, col;
   char key[64], value[512];
@@ -135,24 +259,85 @@ std::string CtrServiceImpl::showData()
   
   col =CITICs_HsHlp_GetColCount(hs_handle_);
 
+  rapidjson::Value array( rapidjson::kArrayType );
+
   for(int i=0; i<row; i++)
   {
     if(0 == CITICs_HsHlp_GetNextRow(hs_handle_))
     {
-      sstream <<"row " <<i+1 <<" --------- \n";
-      
+      rapidjson::Value o(rapidjson::kObjectType);
       for(int j=0; j<col; j++)
       {
         CITICs_HsHlp_GetColName(hs_handle_,j, key);
-
         CITICs_HsHlp_GetValueByIndex(hs_handle_, j, value);
 
-        sstream <<key <<": " <<value <<"\n";
+        rapidjson::Value k;
+        k.SetString(key, strlen(key), allocator);
+          
+        rapidjson::Value v;
+        v.SetString(value, strlen(value), allocator);
+
+        o.AddMember(k, v, allocator);
       }
+      rapidjson::Value obj( rapidjson::kObjectType );
+      obj.AddMember("Record", o, allocator);
+
+      array.PushBack(obj, allocator);
     }
   }
 
-  return sstream.str();
+  doc.SetObject();
+  doc.AddMember(rsp_key, array, allocator);
+
+}
+
+std::string CtrServiceImpl::jsonToString(const rapidjson::Document& doc)
+{
+  rapidjson::StringBuffer sb;
+  rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(sb);
+
+  doc.Accept(writer);
+
+  return sb.GetString();
+}
+
+void CtrServiceImpl::setDefaultReqMsg()
+{
+  rapidjson::Value& rsp_login_record = rsp_login_[RSP_LOGIN][0];
+  
+  CITICs_HsHlp_BeginParam(hs_handle_);
+  CITICs_HsHlp_SetValue(hs_handle_, "client_id", rsp_login_record["Record"]["client_id"].GetString());
+  
+  CITICs_HsHlp_SetValue(hs_handle_, "fund_account", options_->account.data());
+  CITICs_HsHlp_SetValue(hs_handle_, "sysnode_id", rsp_login_record["Record"]["sysnode_id"].GetString());
+  
+  CITICs_HsHlp_SetValue(hs_handle_, "identity_type", "2");	
+  CITICs_HsHlp_SetValue(hs_handle_, "op_branch_no", rsp_login_record["Record"]["branch_no"].GetString());
+  CITICs_HsHlp_SetValue(hs_handle_, "branch_no", rsp_login_record["Record"]["branch_no"].GetString());
+  
+  CITICs_HsHlp_SetValue(hs_handle_, "op_station", options_->op_station.data());
+  CITICs_HsHlp_SetValue(hs_handle_, "op_entrust_way", options_->op_entrust_way.data());
+  CITICs_HsHlp_SetValue(hs_handle_, "password_type", "2");
+  CITICs_HsHlp_SetValue(hs_handle_, "password", options_->password.data());
+  CITICs_HsHlp_SetValue(hs_handle_, "asset_prop", rsp_login_record["Record"]["asset_prop"].GetString());
+  CITICs_HsHlp_SetValue(hs_handle_, "user_token", rsp_login_record["Record"]["user_token"].GetString());
+  CITICs_HsHlp_SetValue(hs_handle_, "request_num", "500");
+}
+
+std::string CtrServiceImpl::toExchange(const std::string& stock_code)
+{
+  boost::regex sh_regex("^(60)(.*)");
+  boost::regex sz_regex("^(00|30)(.*)");
+
+  if( boost::regex_match(stock_code, sh_regex) )
+    return "1";
+
+  if( boost::regex_match(stock_code, sz_regex) )
+    return "2";
+
+  std::string err_msg = "the stock code - " + stock_code + " is wrong.";
+      
+  throw std::runtime_error(err_msg);
 }
 
 soil::Options* CtrService::createOptions()

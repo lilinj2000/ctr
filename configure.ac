@@ -45,6 +45,18 @@ if test -d /llj/libs ; then
    home_libs=/llj/libs
 fi
 
+dnl rapidjson lib
+RAPIDJSON_HOME=$home_3rd/rapidjson
+AC_ARG_WITH([rapidjson], 
+    [AS_HELP_STRING([--with-rapidjson],
+        [home path of the rapidjson, defaults to $RAPIDJSON_HOME])],
+    [RAPIDJSON_HOME="$withval"],
+    [RAPIDJSON_HOME="$RAPIDJSON_HOME"])
+AC_SUBST([RAPIDJSON_HOME])
+
+RAPIDJSON_CPPFLAGS="-I$RAPIDJSON_HOME/include"
+AC_SUBST(RAPIDJSON_CPPFLAGS)
+
 dnl ssl lib
 AC_ARG_WITH([ssl],
     [AS_HELP_STRING([--with-ssl],

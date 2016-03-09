@@ -4,6 +4,7 @@
 #include "ctr/CtrService.hh"
 
 #include "CITICs_HsT2Hlp.h"
+#include "rapidjson/document.h"
 
 namespace ctr
 {
@@ -17,6 +18,19 @@ class CtrServiceImpl : public CtrService
 
   virtual ~CtrServiceImpl();
 
+  virtual void qryStockholder();
+
+  virtual void qryFund();
+
+  virtual void qryEntrust(const std::string& entrust_no);
+  
+  virtual void entrust(const std::string& stock_code,
+                       int amount,
+                       double price,
+                       bool buy);
+
+  virtual void cancelEntrust(const std::string& entrust_no);
+  
  protected:
   
   void initHsApi();
@@ -25,7 +39,13 @@ class CtrServiceImpl : public CtrService
 
   std::string getHsError();
 
-  std::string showData();
+  void fetchRspData(const std::string& rsp, rapidjson::Document& doc);
+
+  std::string jsonToString(const rapidjson::Document& doc);
+
+  void setDefaultReqMsg();
+
+  std::string toExchange(const std::string& stock_code);
   
  private:
 
@@ -34,11 +54,7 @@ class CtrServiceImpl : public CtrService
   HSHLPCFGHANDLE hs_config_;
   HSHLPHANDLE hs_handle_;
 
-  std::string client_id_;
-  std::string user_token_;
-  std::string branch_no_;
-  std::string asset_prop_;
-  std::string sysnode_id_;
+  rapidjson::Document rsp_login_;
 };
 
 

@@ -6,7 +6,8 @@ libctr_la_SOURCES = CtrOptions.cc CtrServiceImpl.cc
 libctr_la_CPPFLAGS = -I$(top_srcdir) \
 			$(BOOST_CPPFLAGS) \
 			$(CITICS_CPPFLAGS) \
-			$(SOIL_CPPFLAGS)
+			$(SOIL_CPPFLAGS) \
+			$(RAPIDJSON_CPPFLAGS)
 
 libctr_la_LIBADD = $(CITICS_LIBADD) \
 		$(BOOST_LIBADD) \

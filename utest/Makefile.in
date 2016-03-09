@@ -94,7 +94,7 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
-am_unittest_OBJECTS = unittest-CtrServiceImplTest.$(OBJEXT)
+am_unittest_OBJECTS = unittest-CtrServiceTest.$(OBJEXT)
 unittest_OBJECTS = $(am_unittest_OBJECTS)
 am__DEPENDENCIES_1 =
 unittest_DEPENDENCIES = $(am__DEPENDENCIES_1) ../service/libctr.la \
@@ -286,6 +286,8 @@ PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 RANLIB = @RANLIB@
+RAPIDJSON_CPPFLAGS = @RAPIDJSON_CPPFLAGS@
+RAPIDJSON_HOME = @RAPIDJSON_HOME@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
@@ -353,7 +355,7 @@ top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
 SUBDIRS = 
 unittest_SOURCES = \
-	CtrServiceImplTest.cc
+	CtrServiceTest.cc
 
 unittest_CPPFLAGS = -I$(top_srcdir) -I.. -I..\
 		$(BOOST_CPPFLAGS) \
@@ -428,7 +430,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unittest-CtrServiceImplTest.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unittest-CtrServiceTest.Po@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -451,19 +453,19 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LTCXXCOMPILE) -c -o $@ $<
 
-unittest-CtrServiceImplTest.o: CtrServiceImplTest.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unittest-CtrServiceImplTest.o -MD -MP -MF $(DEPDIR)/unittest-CtrServiceImplTest.Tpo -c -o unittest-CtrServiceImplTest.o `test -f 'CtrServiceImplTest.cc' || echo '$(srcdir)/'`CtrServiceImplTest.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/unittest-CtrServiceImplTest.Tpo $(DEPDIR)/unittest-CtrServiceImplTest.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='CtrServiceImplTest.cc' object='unittest-CtrServiceImplTest.o' libtool=no @AMDEPBACKSLASH@
+unittest-CtrServiceTest.o: CtrServiceTest.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unittest-CtrServiceTest.o -MD -MP -MF $(DEPDIR)/unittest-CtrServiceTest.Tpo -c -o unittest-CtrServiceTest.o `test -f 'CtrServiceTest.cc' || echo '$(srcdir)/'`CtrServiceTest.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/unittest-CtrServiceTest.Tpo $(DEPDIR)/unittest-CtrServiceTest.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='CtrServiceTest.cc' object='unittest-CtrServiceTest.o' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unittest-CtrServiceImplTest.o `test -f 'CtrServiceImplTest.cc' || echo '$(srcdir)/'`CtrServiceImplTest.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unittest-CtrServiceTest.o `test -f 'CtrServiceTest.cc' || echo '$(srcdir)/'`CtrServiceTest.cc
 
-unittest-CtrServiceImplTest.obj: CtrServiceImplTest.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unittest-CtrServiceImplTest.obj -MD -MP -MF $(DEPDIR)/unittest-CtrServiceImplTest.Tpo -c -o unittest-CtrServiceImplTest.obj `if test -f 'CtrServiceImplTest.cc'; then $(CYGPATH_W) 'CtrServiceImplTest.cc'; else $(CYGPATH_W) '$(srcdir)/CtrServiceImplTest.cc'; fi`
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/unittest-CtrServiceImplTest.Tpo $(DEPDIR)/unittest-CtrServiceImplTest.Po
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='CtrServiceImplTest.cc' object='unittest-CtrServiceImplTest.obj' libtool=no @AMDEPBACKSLASH@
+unittest-CtrServiceTest.obj: CtrServiceTest.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT unittest-CtrServiceTest.obj -MD -MP -MF $(DEPDIR)/unittest-CtrServiceTest.Tpo -c -o unittest-CtrServiceTest.obj `if test -f 'CtrServiceTest.cc'; then $(CYGPATH_W) 'CtrServiceTest.cc'; else $(CYGPATH_W) '$(srcdir)/CtrServiceTest.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/unittest-CtrServiceTest.Tpo $(DEPDIR)/unittest-CtrServiceTest.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='CtrServiceTest.cc' object='unittest-CtrServiceTest.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unittest-CtrServiceImplTest.obj `if test -f 'CtrServiceImplTest.cc'; then $(CYGPATH_W) 'CtrServiceImplTest.cc'; else $(CYGPATH_W) '$(srcdir)/CtrServiceImplTest.cc'; fi`
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o unittest-CtrServiceTest.obj `if test -f 'CtrServiceTest.cc'; then $(CYGPATH_W) 'CtrServiceTest.cc'; else $(CYGPATH_W) '$(srcdir)/CtrServiceTest.cc'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

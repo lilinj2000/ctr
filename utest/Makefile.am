@@ -5,7 +5,7 @@ SUBDIRS =
 noinst_PROGRAMS = unittest
 
 unittest_SOURCES = \
-	CtrServiceImplTest.cc
+	CtrServiceTest.cc
 
 
 unittest_CPPFLAGS = -I$(top_srcdir) -I.. -I..\

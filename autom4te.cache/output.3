@@ -651,6 +651,8 @@ BOOST_HOME
 SSL_LIBADD
 SSL_CPPFLAGS
 SSL_HOME
+RAPIDJSON_CPPFLAGS
+RAPIDJSON_HOME
 LT_AGE
 LT_REVISION
 LT_CURRENT
@@ -787,6 +789,7 @@ enable_fast_install
 with_gnu_ld
 with_sysroot
 enable_libtool_lock
+with_rapidjson
 with_ssl
 with_boost
 with_citics
@@ -1444,6 +1447,8 @@ Optional Packages:
   --with-gnu-ld           assume the C compiler uses GNU ld @<:@default=no@:>@
   --with-sysroot=DIR Search for dependent libraries within DIR
                         (or the compiler's sysroot if not specified).
+  --with-rapidjson        home path of the rapidjson, defaults to
+                          @S|@RAPIDJSON_HOME
   --with-ssl              home path of the ssl, defaults to @S|@home_3rd/ssl
   --with-boost            home path of the boost, defaults to @S|@home_3rd/boost
   --with-citics           path of the citics api, defaults to @S|@CITICS_HOME
@@ -15313,6 +15318,20 @@ fi
 if test -d /llj/libs ; then
    home_libs=/llj/libs
 fi
+
+RAPIDJSON_HOME=$home_3rd/rapidjson
+
+@%:@ Check whether --with-rapidjson was given.
+if test "${with_rapidjson+set}" = set; then :
+  withval=$with_rapidjson; RAPIDJSON_HOME="$withval"
+else
+  RAPIDJSON_HOME="$RAPIDJSON_HOME"
+fi
+
+
+
+RAPIDJSON_CPPFLAGS="-I$RAPIDJSON_HOME/include"
+
 
 
 @%:@ Check whether --with-ssl was given.
