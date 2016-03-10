@@ -51,7 +51,16 @@ std::string HsUtil::goT2(int func_no, const std::string& func_name, const std::s
   fetchRspData( func_rsp, doc );
 
   return json::toString(doc);
+}
 
+void HsUtil::beginParam()
+{
+  CITICs_HsHlp_BeginParam(hs_handle_);
+}
+
+void HsUtil::setValue(const std::string& name, const std::string& value)
+{
+  CITICs_HsHlp_SetValue(hs_handle_, name.data(), value.data());
 }
 
 void HsUtil::initHsApi(const std::string& hs_config)
@@ -146,33 +155,5 @@ void HsUtil::fetchRspData(const std::string& rsp, json::Document& doc)
   doc.AddMember(rsp_key, array, allocator);
 
 }
-
-// void HsUtil::setDefaultReqMsg()
-// {
-//   if( rsp_login_[RSP_LOGIN].Empty() )
-//     throw std::runtime_error("login response is wrong.");
-  
-//   json::Value& rsp_login_record = rsp_login_[RSP_LOGIN][0];
-  
-//   CITICs_HsHlp_BeginParam(hs_handle_);
-//   CITICs_HsHlp_SetValue(hs_handle_, "client_id", rsp_login_record["Record"]["client_id"].GetString());
-  
-//   CITICs_HsHlp_SetValue(hs_handle_, "fund_account", options_->account.data());
-//   CITICs_HsHlp_SetValue(hs_handle_, "sysnode_id", rsp_login_record["Record"]["sysnode_id"].GetString());
-  
-//   CITICs_HsHlp_SetValue(hs_handle_, "identity_type", "2");	
-//   CITICs_HsHlp_SetValue(hs_handle_, "op_branch_no", rsp_login_record["Record"]["branch_no"].GetString());
-//   CITICs_HsHlp_SetValue(hs_handle_, "branch_no", rsp_login_record["Record"]["branch_no"].GetString());
-  
-//   CITICs_HsHlp_SetValue(hs_handle_, "op_station", options_->op_station.data());
-//   CITICs_HsHlp_SetValue(hs_handle_, "op_entrust_way", options_->op_entrust_way.data());
-//   CITICs_HsHlp_SetValue(hs_handle_, "password_type", "2");
-//   CITICs_HsHlp_SetValue(hs_handle_, "password", options_->password.data());
-//   CITICs_HsHlp_SetValue(hs_handle_, "asset_prop", rsp_login_record["Record"]["asset_prop"].GetString());
-//   CITICs_HsHlp_SetValue(hs_handle_, "user_token", rsp_login_record["Record"]["user_token"].GetString());
-//   CITICs_HsHlp_SetValue(hs_handle_, "request_num", "500");
-// }
-
-
 
 };

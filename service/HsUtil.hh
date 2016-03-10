@@ -15,13 +15,14 @@ class HsUtil
 
   virtual ~HsUtil();
 
+  
   std::string goT2(int func_no, const std::string& func_name,
                    const std::string& func_rsp,
                    const std::string& msg="");
 
+  void beginParam();
 
-  // void setDefaultReqMsg();
-
+  void setValue(const std::string& name, const std::string& value);
 
  protected:
   

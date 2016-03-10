@@ -2,13 +2,13 @@
 #define CTR_TRADESERVICE_IMPL_HH
 
 #include "ctr/TradeService.hh"
-#include "CITICs_HsT2Hlp.h"
 #include "json/json.hh"
 
 namespace ctr
 {
 
 class TradeOptions;
+class HsUtil;
 
 class TradeServiceImpl : public TradeService
 {
@@ -38,29 +38,18 @@ class TradeServiceImpl : public TradeService
   
  protected:
   
-  void initHsApi();
-
   void login();
 
-  std::string getHsError();
-
-  void fetchRspData(const std::string& rsp, json::Document& doc);
+  std::string toExchange(const std::string& stock_code);
 
   void setDefaultReqMsg();
-
-  std::string goT2(int func_no, const std::string& func_name,
-                   const std::string& func_rsp,
-                   const std::string& msg="");
-
-  std::string toExchange(const std::string& stock_code);
   
  private:
 
   TradeOptions* options_;
 
-  HSHLPCFGHANDLE hs_config_;
-  HSHLPHANDLE hs_handle_;
-
+  std::unique_ptr<HsUtil> hs_util_;
+  
   json::Document rsp_login_;
 };
 
