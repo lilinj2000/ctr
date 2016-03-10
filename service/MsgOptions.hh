@@ -19,9 +19,11 @@ class MsgOptions : public soil::Options
 
   virtual po::options_description* configOptions();
 
-  std::string issue_type;
+  int issue_type;
 
   std::string acc_info;
+
+  int timeout;
   
   std::string hs_config;
   

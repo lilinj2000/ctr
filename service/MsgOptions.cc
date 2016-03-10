@@ -13,10 +13,13 @@ MsgOptions::MsgOptions():
   namespace po = boost::program_options;
 
   options_.add_options()
-      ("msg.issue_type", po::value<std::string>(&issue_type), 
+      ("msg.issue_type", po::value<int>(&issue_type), 
        "issue type")
-      ("msg.acc_info", po::value<std::string>(&issue_type), 
-       "issue type")
+      ("msg.acc_info", po::value<std::string>(&acc_info), 
+       "acc info")
+      
+      ("msg.timeout", po::value<int>(&timeout), 
+       "timeout")
 
       ("msg.hs_config", po::value<std::string>(&hs_config), 
        "hs config file")
