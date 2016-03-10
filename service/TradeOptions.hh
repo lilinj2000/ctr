@@ -1,5 +1,5 @@
-#ifndef CTR_OPTIONS_HH
-#define CTR_OPTIONS_HH
+#ifndef CTR_TRADEOPTIONS_HH
+#define CTR_TRADEOPTIONS_HH
 
 #include "soil/Config.hh"
 
@@ -9,13 +9,13 @@ namespace ctr
 {
 namespace po = boost::program_options;
 
-class CtrOptions : public soil::Options
+class TradeOptions : public soil::Options
 {
  public:
 
-  CtrOptions();
+  TradeOptions();
   
-  virtual ~CtrOptions();
+  virtual ~TradeOptions();
 
   virtual po::options_description* configOptions();
 
@@ -25,6 +25,10 @@ class CtrOptions : public soil::Options
   std::string op_station;
 
   std::string op_entrust_way;
+
+  std::string issue_type;
+
+  std::string acc_info;
   
   std::string hs_config;
   

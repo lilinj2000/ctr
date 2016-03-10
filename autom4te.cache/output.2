@@ -636,6 +636,9 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIB@&t@OBJS
+JSON_LIBADD
+JSON_CPPFLAGS
+JSON_HOME
 SOIL_LIBADD
 SOIL_CPPFLAGS
 SOIL_HOME
@@ -795,6 +798,7 @@ with_boost
 with_citics
 with_gtest
 with_soil
+with_json
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1454,6 +1458,7 @@ Optional Packages:
   --with-citics           path of the citics api, defaults to @S|@CITICS_HOME
   --with-gtest            home path of the gtest, defaults to @S|@home_3rd/gtest
   --with-soil             home path of the soil, defaults to @S|@home_libs/soil
+  --with-json             home path of the json, defaults to @S|@home_libs/json
 
 Some influential environment variables:
   CXX         C++ compiler command
@@ -15414,6 +15419,21 @@ fi
 
 SOIL_CPPFLAGS="-I$SOIL_HOME/include"
 SOIL_LIBADD="$SOIL_HOME/lib/libsoil.la"
+
+
+
+
+@%:@ Check whether --with-json was given.
+if test "${with_json+set}" = set; then :
+  withval=$with_json; JSON_HOME="$withval"
+else
+  JSON_HOME="$home_libs/json"
+fi
+
+
+
+JSON_CPPFLAGS="-I$JSON_HOME/include"
+JSON_LIBADD="$JSON_HOME/lib/libjson.la"
 
 
 

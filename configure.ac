@@ -131,6 +131,19 @@ SOIL_LIBADD="$SOIL_HOME/lib/libsoil.la"
 AC_SUBST(SOIL_CPPFLAGS)
 AC_SUBST(SOIL_LIBADD)
 
+dnl json lib
+AC_ARG_WITH([json],
+    [AS_HELP_STRING([--with-json],
+        [home path of the json, defaults to $home_libs/json])],
+    [JSON_HOME="$withval"],
+    [JSON_HOME="$home_libs/json"])
+AC_SUBST([JSON_HOME])
+
+JSON_CPPFLAGS="-I$JSON_HOME/include"
+JSON_LIBADD="$JSON_HOME/lib/libjson.la"
+AC_SUBST(JSON_CPPFLAGS)
+AC_SUBST(JSON_LIBADD)
+
 
 AC_OUTPUT([
 	Makefile

@@ -1,23 +1,21 @@
-#include "CtrServiceImpl.hh"
-#include "CtrOptions.hh"
+#include "TradeServiceImpl.hh"
+#include "TradeOptions.hh"
 #include "CtrLog.hh"
 #include "CtrDef.hh"
 
 #include "soil/NumberToString.hh"
-#include "rapidjson/prettywriter.h"
-
 #include "boost/regex.hpp"
 
 namespace ctr
 {
 
-CtrServiceImpl::CtrServiceImpl(soil::Options* options):
+TradeServiceImpl::TradeServiceImpl(soil::Options* options):
     hs_config_(nullptr),
     hs_handle_(nullptr)
 {
-  CTR_TRACE <<"CtrServiceImpl::CtrServiceImpl()";
+  CTR_TRACE <<"TradeServiceImpl::TradeServiceImpl()";
 
-  options_ = dynamic_cast<CtrOptions*>(options);
+  options_ = dynamic_cast<TradeOptions*>(options);
 
   initHsApi();
 
@@ -25,9 +23,9 @@ CtrServiceImpl::CtrServiceImpl(soil::Options* options):
 
 }
 
-CtrServiceImpl::~CtrServiceImpl()
+TradeServiceImpl::~TradeServiceImpl()
 {
-  CTR_TRACE <<"CtrServiceImpl::~CtrServiceImpl()";
+  CTR_TRACE <<"TradeServiceImpl::~TradeServiceImpl()";
 
   if( hs_handle_ )
   {
@@ -37,105 +35,54 @@ CtrServiceImpl::~CtrServiceImpl()
 
 }
 
-void CtrServiceImpl::qryStockholder()
+std::string TradeServiceImpl::qryStockholder()
 {
-  CTR_TRACE <<"CtrServiceImpl::qryStockholder()";
+  CTR_TRACE <<"TradeServiceImpl::qryStockholder()";
 
   setDefaultReqMsg();
 
-  int ret = CITICs_HsHlp_BizCallAndCommit(hs_handle_, QRY_STOCKHOLDER_FUNC, 0);
-  if( ret!=0 )
-  {
-    std::string err_msg = "query stockholder failed.\n" + getHsError();
-
-    throw std::runtime_error( err_msg );
-  }
-
-  rapidjson::Document doc;
-  fetchRspData( RSP_QRY_STOCKHOLDER, doc );
-  
-  CTR_DEBUG <<"query stockholder response: \n"
-            <<jsonToString( doc );
-
+  return goT2(QRY_STOCKHOLDER_FUNC, "query stockholder", RSP_QRY_STOCKHOLDER);
 }
 
-void CtrServiceImpl::qryStockcode(const std::string& stock_code)
+std::string TradeServiceImpl::qryStockcode(const std::string& stock_code)
 {
-  CTR_TRACE <<"CtrServiceImpl::qryStockcode()";
+  CTR_TRACE <<"TradeServiceImpl::qryStockcode()";
 
   setDefaultReqMsg();
 
   CITICs_HsHlp_SetValue(hs_handle_, "stock_code", stock_code.data());
-  
-  int ret = CITICs_HsHlp_BizCallAndCommit(hs_handle_, QRY_STOCKCODE_FUNC, 0);
-  if( ret!=0 )
-  {
-    std::string err_msg = "query stockcode failed.\n" + getHsError();
 
-    throw std::runtime_error( err_msg );
-  }
-
-  rapidjson::Document doc;
-  fetchRspData( RSP_QRY_STOCKCODE, doc );
-  
-  CTR_DEBUG <<"query stockcode response: \n"
-            <<jsonToString( doc );
+  return goT2(QRY_STOCKCODE_FUNC, "query stockcode", RSP_QRY_STOCKCODE);
 
 }
 
-void CtrServiceImpl::qryFund()
+std::string TradeServiceImpl::qryFund()
 {
-  CTR_TRACE <<"CtrServiceImpl::qryFund()";
+  CTR_TRACE <<"TradeServiceImpl::qryFund()";
 
   setDefaultReqMsg();
 
-  int ret = CITICs_HsHlp_BizCallAndCommit(hs_handle_, QRY_FUND_FUNC, 0);
-  if( ret!=0 )
-  {
-    std::string err_msg = "query fund failed.\n" + getHsError();
-
-    throw std::runtime_error( err_msg );
-  }
-
-  rapidjson::Document doc;
-  fetchRspData( RSP_QRY_FUND, doc );
-  
-  CTR_DEBUG <<"query fund response: \n"
-            <<jsonToString( doc );
-
+  return goT2(QRY_FUND_FUNC, "query fund", RSP_QRY_FUND);
 }
 
-void CtrServiceImpl::qryEntrust(const std::string& entrust_no)
+std::string TradeServiceImpl::qryEntrust(const std::string& entrust_no)
 {
-  CTR_TRACE <<"CtrServiceImpl::qryEntrust()";
+  CTR_TRACE <<"TradeServiceImpl::qryEntrust()";
 
   setDefaultReqMsg();
 
   CITICs_HsHlp_SetValue(hs_handle_, "locate_entrust_no", entrust_no.data());
 
-  int ret = CITICs_HsHlp_BizCallAndCommit(hs_handle_, QRY_ENTRUST_FUNC, 0);
-  if( ret!=0 )
-  {
-    std::string err_msg = "query entrust failed.\n" + getHsError();
-
-    throw std::runtime_error( err_msg );
-  }
-
-  rapidjson::Document doc;
-  fetchRspData( RSP_QRY_ENTRUST, doc );
-  
-  CTR_DEBUG <<"query entrust response: \n"
-            <<jsonToString( doc );
-
+  return goT2(QRY_ENTRUST_FUNC, "query entrust", RSP_QRY_ENTRUST);
 }
 
 
-void CtrServiceImpl::entrust(const std::string& stock_code,
+std::string TradeServiceImpl::entrust(const std::string& stock_code,
                              int amount,
                              double price,
                              bool buy)
 {
-  CTR_TRACE <<"CtrServiceImpl::entrust()";
+  CTR_TRACE <<"TradeServiceImpl::entrust()";
 
   setDefaultReqMsg();
 
@@ -152,52 +99,45 @@ void CtrServiceImpl::entrust(const std::string& stock_code,
   CITICs_HsHlp_SetValue(hs_handle_, "batch_no", "0");
   CITICs_HsHlp_SetValue(hs_handle_, "entrust_type", "0");
 
-  int ret = CITICs_HsHlp_BizCallAndCommit(hs_handle_, ENTRUST_FUNC, 0);
-  if( ret!=0 )
-  {
-    std::string err_msg = "entrust failed.\n" + getHsError();
-
-    throw std::runtime_error( err_msg );
-  }
-
-  rapidjson::Document doc;
-  fetchRspData( RSP_ENTRUST, doc );
-  
-  CTR_DEBUG <<"entrust response: \n"
-            <<jsonToString( doc );
-
+  return goT2(ENTRUST_FUNC, "entrust", RSP_ENTRUST);
 }
 
-void CtrServiceImpl::cancelEntrust(const std::string& entrust_no)
+std::string TradeServiceImpl::cancelEntrust(const std::string& entrust_no)
 {
-  CTR_TRACE <<"CtrServiceImpl::cancelEntrust()";
+  CTR_TRACE <<"TradeServiceImpl::cancelEntrust()";
 
   setDefaultReqMsg();
 
   CITICs_HsHlp_SetValue(hs_handle_, "entrust_no", entrust_no.data());
   CITICs_HsHlp_SetValue(hs_handle_, "batch_flag", "0");
   CITICs_HsHlp_SetValue(hs_handle_, "locate_entrust_no", entrust_no.data());
-        
-  int ret = CITICs_HsHlp_BizCallAndCommit(hs_handle_, CANCEL_ENTRUST_FUNC, 0);
-  if( ret!=0 )
-  {
-    std::string err_msg = "cancel entrust failed.\n" + getHsError();
 
-    throw std::runtime_error( err_msg );
-  }
-
-  rapidjson::Document doc;
-  fetchRspData( RSP_CANCEL_ENTRUST, doc );
-  
-  CTR_DEBUG <<"cancel entrust response: \n"
-            <<jsonToString( doc );
-
+  return goT2(CANCEL_ENTRUST_FUNC, "cancel entrust", RSP_CANCEL_ENTRUST);
 }
 
-
-void CtrServiceImpl::initHsApi()
+std::string TradeServiceImpl::subscribe()
 {
-  CTR_TRACE <<"CtrServiceImpl::initHsApi()";
+  CTR_TRACE <<"TradeServiceImpl::subscribe()";
+
+  std::string msg = "issue_type:" + options_->issue_type;
+  msg += ",acc_info:" + options_->acc_info;
+
+  return goT2(SUBSCRIBE_FUNC, "subscribe", RSP_SUBSCRIBE, msg);
+}
+
+std::string TradeServiceImpl::unsubscribe()
+{
+  CTR_TRACE <<"TradeServiceImpl::unsubscribe()";
+
+  std::string msg = "issue_type:" + options_->issue_type;
+  msg += ",acc_info:" + options_->acc_info;
+
+  return goT2(UNSUBSCRIBE_FUNC, "unsubscribe", RSP_UNSUBSCRIBE, msg);
+}
+
+void TradeServiceImpl::initHsApi()
+{
+  CTR_TRACE <<"TradeServiceImpl::initHsApi()";
 
   CTR_INFO <<"hs config file: " <<options_->hs_config;
   
@@ -228,9 +168,9 @@ void CtrServiceImpl::initHsApi()
 
 }
 
-void CtrServiceImpl::login()
+void TradeServiceImpl::login()
 {
-  CTR_TRACE <<"CtrServiceImpl::login()";
+  CTR_TRACE <<"TradeServiceImpl::login()";
 
   CITICs_HsHlp_BeginParam(hs_handle_);
   CITICs_HsHlp_SetValue(hs_handle_, "identity_type", "2");
@@ -252,13 +192,13 @@ void CtrServiceImpl::login()
   fetchRspData( RSP_LOGIN, rsp_login_ );
   
   CTR_DEBUG <<"login response: \n"
-            <<jsonToString( rsp_login_ );
+            <<json::toString( rsp_login_ );
 }
 
-std::string CtrServiceImpl::getHsError()
+std::string TradeServiceImpl::getHsError()
 {
   int err_no = 0;
-  char msg[512];
+  char msg[ERROR_MSG_SIZE];
   
   CITICs_HsHlp_GetErrorMsg(hs_handle_, &err_no, msg);
 
@@ -269,11 +209,11 @@ std::string CtrServiceImpl::getHsError()
   return err_msg;
 }
 
-void CtrServiceImpl::fetchRspData(const std::string& rsp, rapidjson::Document& doc)
+void TradeServiceImpl::fetchRspData(const std::string& rsp, json::Document& doc)
 {
-  rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
+  json::Document::AllocatorType& allocator = doc.GetAllocator();
 
-  rapidjson::Value rsp_key;
+  json::Value rsp_key;
   rsp_key.SetString(rsp.data(), rsp.length(), allocator);
   
   int row, col;
@@ -283,27 +223,27 @@ void CtrServiceImpl::fetchRspData(const std::string& rsp, rapidjson::Document& d
   
   col =CITICs_HsHlp_GetColCount(hs_handle_);
 
-  rapidjson::Value array( rapidjson::kArrayType );
+  json::Value array( json::kArrayType );
 
   for(int i=0; i<row; i++)
   {
     if(0 == CITICs_HsHlp_GetNextRow(hs_handle_))
     {
-      rapidjson::Value o(rapidjson::kObjectType);
+      json::Value o(json::kObjectType);
       for(int j=0; j<col; j++)
       {
         CITICs_HsHlp_GetColName(hs_handle_,j, key);
         CITICs_HsHlp_GetValueByIndex(hs_handle_, j, value);
 
-        rapidjson::Value k;
+        json::Value k;
         k.SetString(key, strlen(key), allocator);
           
-        rapidjson::Value v;
+        json::Value v;
         v.SetString(value, strlen(value), allocator);
 
         o.AddMember(k, v, allocator);
       }
-      rapidjson::Value obj( rapidjson::kObjectType );
+      json::Value obj( json::kObjectType );
       obj.AddMember("Record", o, allocator);
 
       array.PushBack(obj, allocator);
@@ -315,22 +255,12 @@ void CtrServiceImpl::fetchRspData(const std::string& rsp, rapidjson::Document& d
 
 }
 
-std::string CtrServiceImpl::jsonToString(const rapidjson::Document& doc)
-{
-  rapidjson::StringBuffer sb;
-  rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(sb);
-
-  doc.Accept(writer);
-
-  return sb.GetString();
-}
-
-void CtrServiceImpl::setDefaultReqMsg()
+void TradeServiceImpl::setDefaultReqMsg()
 {
   if( rsp_login_[RSP_LOGIN].Empty() )
     throw std::runtime_error("login response is wrong.");
   
-  rapidjson::Value& rsp_login_record = rsp_login_[RSP_LOGIN][0];
+  json::Value& rsp_login_record = rsp_login_[RSP_LOGIN][0];
   
   CITICs_HsHlp_BeginParam(hs_handle_);
   CITICs_HsHlp_SetValue(hs_handle_, "client_id", rsp_login_record["Record"]["client_id"].GetString());
@@ -351,7 +281,34 @@ void CtrServiceImpl::setDefaultReqMsg()
   CITICs_HsHlp_SetValue(hs_handle_, "request_num", "500");
 }
 
-std::string CtrServiceImpl::toExchange(const std::string& stock_code)
+std::string TradeServiceImpl::goT2(int func_no, const std::string& func_name, const std::string& func_rsp, const std::string& msg)
+{
+  int ret = -1;
+
+  if( msg.empty() )
+  {
+    ret = CITICs_HsHlp_BizCallAndCommit(hs_handle_, func_no, 0);
+  }
+  else
+  {
+    ret = CITICs_HsHlp_BizCallAndCommit(hs_handle_, func_no, msg.data(), BIZCALL_SUBSCRIBE, 0);
+  }
+  
+  if( ret!=0 )
+  {
+    std::string err_msg = func_name + " failed.\n" + getHsError();
+
+    throw std::runtime_error( err_msg );
+  }
+
+  json::Document doc;
+  fetchRspData( func_rsp, doc );
+
+  return json::toString(doc);
+
+}
+
+std::string TradeServiceImpl::toExchange(const std::string& stock_code)
 {
   boost::regex sh_regex("^(60)(.*)");
   boost::regex sz_regex("^(00|30)(.*)");
@@ -367,14 +324,14 @@ std::string CtrServiceImpl::toExchange(const std::string& stock_code)
   throw std::runtime_error(err_msg);
 }
 
-soil::Options* CtrService::createOptions()
+soil::Options* TradeService::createOptions()
 {
-  return new CtrOptions();
+  return new TradeOptions();
 }
 
-CtrService* CtrService::createService(soil::Options* options)
+TradeService* TradeService::createService(soil::Options* options)
 {
-  return new CtrServiceImpl(options);
+  return new TradeServiceImpl(options);
 }
 
 

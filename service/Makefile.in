@@ -123,9 +123,11 @@ am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 libctr_la_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
-am_libctr_la_OBJECTS = libctr_la-CtrOptions.lo \
-	libctr_la-CtrServiceImpl.lo
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1)
+am_libctr_la_OBJECTS = libctr_la-HsUtil.lo libctr_la-TradeOptions.lo \
+	libctr_la-TradeServiceImpl.lo libctr_la-MsgOptions.lo \
+	libctr_la-MsgServiceImpl.lo
 libctr_la_OBJECTS = $(am_libctr_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -241,6 +243,9 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+JSON_CPPFLAGS = @JSON_CPPFLAGS@
+JSON_HOME = @JSON_HOME@
+JSON_LIBADD = @JSON_LIBADD@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
@@ -339,17 +344,22 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign
 lib_LTLIBRARIES = libctr.la
-libctr_la_SOURCES = CtrOptions.cc CtrServiceImpl.cc
+libctr_la_SOURCES = HsUtil.cc \
+		    TradeOptions.cc TradeServiceImpl.cc \
+		    MsgOptions.cc MsgServiceImpl.cc
+
 libctr_la_CPPFLAGS = -I$(top_srcdir) \
 			$(BOOST_CPPFLAGS) \
 			$(CITICS_CPPFLAGS) \
 			$(SOIL_CPPFLAGS) \
-			$(RAPIDJSON_CPPFLAGS)
+			$(RAPIDJSON_CPPFLAGS) \
+			$(JSON_CPPFLAGS)
 
 libctr_la_LIBADD = $(CITICS_LIBADD) \
 		$(BOOST_LIBADD) \
 		$(SOIL_LIBADD) \
-		$(SSL_LIBADD)
+		$(SSL_LIBADD) \
+		$(JSON_LIBADD)
 
 libctr_la_LDFLAGS = \
 	-no-undefined -version-info \
@@ -358,7 +368,10 @@ libctr_la_LDFLAGS = \
 
 
 # header files
-noinst_HEADERS = CtrLog.hh CtrOptions.hh CtrServiceImpl.hh CtrDef.hh
+noinst_HEADERS = CtrLog.hh CtrDef.hh HsUtil.hh \
+		TradeOptions.hh TradeServiceImpl.hh \
+		MsgOptions.hh MsgServiceImpl.cc
+
 all: all-am
 
 .SUFFIXES:
@@ -438,8 +451,11 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libctr_la-CtrOptions.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libctr_la-CtrServiceImpl.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libctr_la-HsUtil.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libctr_la-MsgOptions.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libctr_la-MsgServiceImpl.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libctr_la-TradeOptions.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libctr_la-TradeServiceImpl.Plo@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -462,19 +478,40 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LTCXXCOMPILE) -c -o $@ $<
 
-libctr_la-CtrOptions.lo: CtrOptions.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libctr_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libctr_la-CtrOptions.lo -MD -MP -MF $(DEPDIR)/libctr_la-CtrOptions.Tpo -c -o libctr_la-CtrOptions.lo `test -f 'CtrOptions.cc' || echo '$(srcdir)/'`CtrOptions.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libctr_la-CtrOptions.Tpo $(DEPDIR)/libctr_la-CtrOptions.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='CtrOptions.cc' object='libctr_la-CtrOptions.lo' libtool=yes @AMDEPBACKSLASH@
+libctr_la-HsUtil.lo: HsUtil.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libctr_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libctr_la-HsUtil.lo -MD -MP -MF $(DEPDIR)/libctr_la-HsUtil.Tpo -c -o libctr_la-HsUtil.lo `test -f 'HsUtil.cc' || echo '$(srcdir)/'`HsUtil.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libctr_la-HsUtil.Tpo $(DEPDIR)/libctr_la-HsUtil.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='HsUtil.cc' object='libctr_la-HsUtil.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libctr_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libctr_la-CtrOptions.lo `test -f 'CtrOptions.cc' || echo '$(srcdir)/'`CtrOptions.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libctr_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libctr_la-HsUtil.lo `test -f 'HsUtil.cc' || echo '$(srcdir)/'`HsUtil.cc
 
-libctr_la-CtrServiceImpl.lo: CtrServiceImpl.cc
-@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libctr_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libctr_la-CtrServiceImpl.lo -MD -MP -MF $(DEPDIR)/libctr_la-CtrServiceImpl.Tpo -c -o libctr_la-CtrServiceImpl.lo `test -f 'CtrServiceImpl.cc' || echo '$(srcdir)/'`CtrServiceImpl.cc
-@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libctr_la-CtrServiceImpl.Tpo $(DEPDIR)/libctr_la-CtrServiceImpl.Plo
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='CtrServiceImpl.cc' object='libctr_la-CtrServiceImpl.lo' libtool=yes @AMDEPBACKSLASH@
+libctr_la-TradeOptions.lo: TradeOptions.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libctr_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libctr_la-TradeOptions.lo -MD -MP -MF $(DEPDIR)/libctr_la-TradeOptions.Tpo -c -o libctr_la-TradeOptions.lo `test -f 'TradeOptions.cc' || echo '$(srcdir)/'`TradeOptions.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libctr_la-TradeOptions.Tpo $(DEPDIR)/libctr_la-TradeOptions.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='TradeOptions.cc' object='libctr_la-TradeOptions.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libctr_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libctr_la-CtrServiceImpl.lo `test -f 'CtrServiceImpl.cc' || echo '$(srcdir)/'`CtrServiceImpl.cc
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libctr_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libctr_la-TradeOptions.lo `test -f 'TradeOptions.cc' || echo '$(srcdir)/'`TradeOptions.cc
+
+libctr_la-TradeServiceImpl.lo: TradeServiceImpl.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libctr_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libctr_la-TradeServiceImpl.lo -MD -MP -MF $(DEPDIR)/libctr_la-TradeServiceImpl.Tpo -c -o libctr_la-TradeServiceImpl.lo `test -f 'TradeServiceImpl.cc' || echo '$(srcdir)/'`TradeServiceImpl.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libctr_la-TradeServiceImpl.Tpo $(DEPDIR)/libctr_la-TradeServiceImpl.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='TradeServiceImpl.cc' object='libctr_la-TradeServiceImpl.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libctr_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libctr_la-TradeServiceImpl.lo `test -f 'TradeServiceImpl.cc' || echo '$(srcdir)/'`TradeServiceImpl.cc
+
+libctr_la-MsgOptions.lo: MsgOptions.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libctr_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libctr_la-MsgOptions.lo -MD -MP -MF $(DEPDIR)/libctr_la-MsgOptions.Tpo -c -o libctr_la-MsgOptions.lo `test -f 'MsgOptions.cc' || echo '$(srcdir)/'`MsgOptions.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libctr_la-MsgOptions.Tpo $(DEPDIR)/libctr_la-MsgOptions.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='MsgOptions.cc' object='libctr_la-MsgOptions.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libctr_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libctr_la-MsgOptions.lo `test -f 'MsgOptions.cc' || echo '$(srcdir)/'`MsgOptions.cc
+
+libctr_la-MsgServiceImpl.lo: MsgServiceImpl.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libctr_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT libctr_la-MsgServiceImpl.lo -MD -MP -MF $(DEPDIR)/libctr_la-MsgServiceImpl.Tpo -c -o libctr_la-MsgServiceImpl.lo `test -f 'MsgServiceImpl.cc' || echo '$(srcdir)/'`MsgServiceImpl.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libctr_la-MsgServiceImpl.Tpo $(DEPDIR)/libctr_la-MsgServiceImpl.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='MsgServiceImpl.cc' object='libctr_la-MsgServiceImpl.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libctr_la_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o libctr_la-MsgServiceImpl.lo `test -f 'MsgServiceImpl.cc' || echo '$(srcdir)/'`MsgServiceImpl.cc
 
 mostlyclean-libtool:
 	-rm -f *.lo

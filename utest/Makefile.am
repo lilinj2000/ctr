@@ -5,7 +5,8 @@ SUBDIRS =
 noinst_PROGRAMS = unittest
 
 unittest_SOURCES = \
-	CtrServiceTest.cc
+	TradeServiceTest.cc \
+	MsgServiceTest.cc
 
 
 unittest_CPPFLAGS = -I$(top_srcdir) -I.. -I..\
@@ -30,6 +31,6 @@ unittest_LDFLAGS = $(LIBADD_DL) -Wl,--no-as-needed -pthread
 # header files
 noinst_HEADERS = 
 
-EXTRA_DIST = env.sh
+EXTRA_DIST = env.sh log.cfg trade.cfg msg.cfg
 
 
