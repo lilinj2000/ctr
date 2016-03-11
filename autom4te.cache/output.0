@@ -15248,7 +15248,7 @@ JSON_LIBADD="$JSON_HOME/lib/libjson.la"
 
 
 
-ac_config_files="$ac_config_files Makefile ctr/Makefile service/Makefile utest/Makefile"
+ac_config_files="$ac_config_files Makefile ctr/Makefile service/Makefile utest/Makefile trade_test/Makefile msg_test/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -16376,6 +16376,8 @@ do
     "ctr/Makefile") CONFIG_FILES="$CONFIG_FILES ctr/Makefile" ;;
     "service/Makefile") CONFIG_FILES="$CONFIG_FILES service/Makefile" ;;
     "utest/Makefile") CONFIG_FILES="$CONFIG_FILES utest/Makefile" ;;
+    "trade_test/Makefile") CONFIG_FILES="$CONFIG_FILES trade_test/Makefile" ;;
+    "msg_test/Makefile") CONFIG_FILES="$CONFIG_FILES msg_test/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

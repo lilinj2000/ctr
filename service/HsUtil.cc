@@ -1,7 +1,9 @@
 #include "HsUtil.hh"
 #include "CtrLog.hh"
+#include "CtrDef.hh"
 
 #include "soil/NumberToString.hh"
+
 
 namespace ctr
 {
@@ -34,6 +36,8 @@ HsUtil::~HsUtil()
 
 std::string HsUtil::goT2(int func_no, const std::string& func_name, const std::string& func_rsp, const std::string& msg)
 {
+  CTR_TRACE <<"HsUtil::goT2()";
+  
   int ret = -1;
 
   if( msg.empty() )
@@ -128,7 +132,7 @@ void HsUtil::msgProcess()
         
         fetchMsgData( *doc );
 
-        msg_queue_->pushMsg( doc.get() );
+        msg_queue_->pushMsg( doc.release() );
 
         CITICs_HsHlp_QueueEraseMsg(hs_handle_, msg_ctrl_.get());
       }
@@ -193,9 +197,6 @@ void HsUtil::fetchRspData(const std::string& rsp, json::Document& doc)
 {
   json::Document::AllocatorType& allocator = doc.GetAllocator();
 
-  json::Value rsp_key;
-  rsp_key.SetString(rsp.data(), rsp.length(), allocator);
-  
   int row, col;
   char key[64], value[512];
   
@@ -223,12 +224,20 @@ void HsUtil::fetchRspData(const std::string& rsp, json::Document& doc)
 
         o.AddMember(k, v, allocator);
       }
+
+      json::Value rec_key;
+      rec_key.SetString( RECORD, strlen(RECORD), allocator);
+
       json::Value obj( json::kObjectType );
-      obj.AddMember("Record", o, allocator);
+      obj.AddMember(rec_key, o, allocator);
 
       array.PushBack(obj, allocator);
     }
   }
+
+  json::Value rsp_key;
+  rsp_key.SetString(rsp.data(), rsp.length(), allocator);
+
 
   doc.SetObject();
   doc.AddMember(rsp_key, array, allocator);
@@ -266,15 +275,22 @@ void HsUtil::fetchMsgData(json::Document& doc)
 
         o.AddMember(k, v, allocator);
       }
+
+      json::Value rec_key;
+      rec_key.SetString( RECORD, strlen(RECORD), allocator);
+
       json::Value obj( json::kObjectType );
-      obj.AddMember("Record", o, allocator);
+      obj.AddMember(rec_key, o, allocator);
 
       array.PushBack(obj, allocator);
     }
   }
 
+  json::Value msg_key;
+  msg_key.SetString( MESSAGE, strlen(MESSAGE), allocator);
+
   doc.SetObject();
-  doc.AddMember("Msg", array, allocator);
+  doc.AddMember(msg_key, array, allocator);
 
 }
 

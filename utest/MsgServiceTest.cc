@@ -47,8 +47,6 @@ class MsgServiceTest : public ::testing::Test
 
 TEST_F(MsgServiceTest, msgTest)
 {
-  cond_->wait( 5000 );
-  
   ASSERT_TRUE( true );
 }
 

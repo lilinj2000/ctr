@@ -154,17 +154,17 @@ void TradeServiceImpl::setDefaultReqMsg()
     throw std::runtime_error("login response is wrong.");
   
   json::Value& rsp_login_record = rsp_login_[RSP_LOGIN][0];
-  
+
   hs_util_->beginParam();
   hs_util_->setValue("client_id", rsp_login_record["Record"]["client_id"].GetString());
   
   hs_util_->setValue("fund_account", options_->account);
   hs_util_->setValue("sysnode_id", rsp_login_record["Record"]["sysnode_id"].GetString());
-  
+
   hs_util_->setValue("identity_type", "2");	
   hs_util_->setValue("op_branch_no", rsp_login_record["Record"]["branch_no"].GetString());
   hs_util_->setValue("branch_no", rsp_login_record["Record"]["branch_no"].GetString());
-  
+
   hs_util_->setValue("op_station", options_->op_station);
   hs_util_->setValue("op_entrust_way", options_->op_entrust_way);
   hs_util_->setValue("password_type", "2");
@@ -172,6 +172,7 @@ void TradeServiceImpl::setDefaultReqMsg()
   hs_util_->setValue("asset_prop", rsp_login_record["Record"]["asset_prop"].GetString());
   hs_util_->setValue("user_token", rsp_login_record["Record"]["user_token"].GetString());
   hs_util_->setValue("request_num", "500");
+
 }
 
 std::string TradeServiceImpl::toExchange(const std::string& stock_code)

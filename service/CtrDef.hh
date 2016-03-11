@@ -29,6 +29,9 @@ static const constexpr char* RSP_CANCEL_ENTRUST = "CancelEntrustRsp";
 static const constexpr char* RSP_SUBSCRIBE = "SubscribeRsp";
 static const constexpr char* RSP_UNSUBSCRIBE = "UnsubscribeRsp";
 
+static const constexpr char* RECORD = "Record";
+static const constexpr char* MESSAGE = "Msg";
+
 };
 
 #endif

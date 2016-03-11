@@ -149,7 +149,9 @@ AC_OUTPUT([
 	Makefile
 	ctr/Makefile
 	service/Makefile
-	utest/Makefile])
+	utest/Makefile
+	trade_test/Makefile
+	msg_test/Makefile])
 
 
 
