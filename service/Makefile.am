@@ -24,7 +24,7 @@ libctr_la_LDFLAGS = \
 	-release $(LT_RELEASE)
 
 # header files
-noinst_HEADERS = CtrLog.hh CtrDef.hh HsUtil.hh \
+noinst_HEADERS = CtrLog.hh HsUtil.hh \
 		TradeOptions.hh TradeServiceImpl.hh \
 		MsgOptions.hh MsgServiceImpl.cc
 

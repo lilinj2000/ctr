@@ -1,8 +1,8 @@
 #include "TradeServiceImpl.hh"
 #include "TradeOptions.hh"
 #include "CtrLog.hh"
-#include "CtrDef.hh"
 #include "HsUtil.hh"
+#include "ctr/CtrDef.hh"
 
 #include "soil/NumberToString.hh"
 #include "boost/regex.hpp"

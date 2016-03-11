@@ -1,6 +1,6 @@
 #include "HsUtil.hh"
 #include "CtrLog.hh"
-#include "CtrDef.hh"
+#include "ctr/CtrDef.hh"
 
 #include "soil/NumberToString.hh"
 

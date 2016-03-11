@@ -8,7 +8,7 @@
 namespace ctr
 {
 
-class MsgServiceTest : public ::testing::Test
+class MsgServiceTest : public ::testing::Test, public MsgCallback
 {
  public:
   MsgServiceTest()
@@ -28,12 +28,18 @@ class MsgServiceTest : public ::testing::Test
 
     cond_.reset( soil::STimer::create() );
 
-    service_.reset( MsgService::createService(options_.get()) );
+    service_.reset( MsgService::createService(options_.get(), this) );
 
   }
 
   void TearDown()
   {
+  }
+
+  virtual void msgCallback(const json::Document* doc)
+  {
+    CTR_INFO <<"msg received:\n"
+             <<json::toString(*doc);
   }
 
  protected:

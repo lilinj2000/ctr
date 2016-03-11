@@ -17,11 +17,17 @@ MsgTest::MsgTest()
 
   cond_.reset( soil::STimer::create() );
 
-  service_.reset( ctr::MsgService::createService(options_.get()) );
+  service_.reset( ctr::MsgService::createService(options_.get(), this) );
 }
 
 MsgTest::~MsgTest()
 {
+}
+
+void MsgTest::msgCallback(const json::Document* doc)
+{
+  SOIL_INFO <<"msg received:\n"
+            <<json::toString(*doc);
 }
 
 void MsgTest::run()

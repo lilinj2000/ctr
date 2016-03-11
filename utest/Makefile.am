@@ -12,8 +12,10 @@ unittest_SOURCES = \
 unittest_CPPFLAGS = -I$(top_srcdir) -I.. -I..\
 		$(BOOST_CPPFLAGS) \
 		$(CITICS_CPPFLAGS) \
+		$(RAPIDJSON_CPPFLAGS) \
 		$(GTEST_CPPFLAGS) \
-		$(SOIL_CPPFLAGS)
+		$(SOIL_CPPFLAGS) \
+		$(JSON_CPPFLAGS)
 
 
 unittest_LDADD = \

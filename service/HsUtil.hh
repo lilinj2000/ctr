@@ -9,18 +9,10 @@
 
 #include "soil/STimer.hh"
 #include "soil/MsgQueue.hh"
+#include "ctr/MsgService.hh"
 
 namespace ctr
 {
-
-class MsgCallback
-{
- public:
-  virtual ~MsgCallback() {
-  }
-
-  virtual void msgCallback(const json::Document*) = 0;
-};
 
 class HsUtil
 {

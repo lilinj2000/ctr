@@ -8,7 +8,9 @@ msg_test_SOURCES = \
 msg_test_CPPFLAGS = -I$(top_srcdir) \
 		$(BOOST_CPPFLAGS) \
 		$(SOIL_CPPFLAGS) \
-		$(CITICS_CPPFLAGS)
+		$(CITICS_CPPFLAGS) \
+		$(RAPIDJSON_CPPFLAGS) \
+		$(JSON_CPPFLAGS)
 
 
 

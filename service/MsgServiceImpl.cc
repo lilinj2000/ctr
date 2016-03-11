@@ -1,14 +1,15 @@
 #include "MsgServiceImpl.hh"
 #include "MsgOptions.hh"
 #include "CtrLog.hh"
-#include "CtrDef.hh"
+#include "ctr/CtrDef.hh"
 
 #include "soil/NumberToString.hh"
 
 namespace ctr
 {
 
-MsgServiceImpl::MsgServiceImpl(soil::Options* options)
+MsgServiceImpl::MsgServiceImpl(soil::Options* options, MsgCallback* callback):
+    callback_(callback)
 {
   CTR_TRACE <<"MsgServiceImpl::MsgServiceImpl()";
 
@@ -23,7 +24,7 @@ MsgServiceImpl::MsgServiceImpl(soil::Options* options)
     CTR_DEBUG <<"subscribe rsp:\n"
               <<rsp_sub;
 
-    hs_util_->startMsgProcess(this, options_->issue_type, options_->timeout);
+    hs_util_->startMsgProcess(callback_, options_->issue_type, options_->timeout);
     
   }
   catch(std::exception& e )
@@ -40,14 +41,6 @@ MsgServiceImpl::~MsgServiceImpl()
   CTR_TRACE <<"MsgServiceImpl::~MsgServiceImpl()";
 
   hs_util_->stopMsgProcess();
-}
-
-void MsgServiceImpl::msgCallback(const json::Document* msg)
-{
-  CTR_TRACE <<"MsgServiceImpl::msgCallback()";
-
-  CTR_INFO <<"msg:\n"
-           <<json::toString(*msg);
 }
 
 std::string MsgServiceImpl::subscribe()
@@ -82,9 +75,9 @@ soil::Options* MsgService::createOptions()
   return new MsgOptions();
 }
 
-MsgService* MsgService::createService(soil::Options* options)
+MsgService* MsgService::createService(soil::Options* options, MsgCallback* callback)
 {
-  return new MsgServiceImpl(options);
+  return new MsgServiceImpl(options, callback);
 }
 
 

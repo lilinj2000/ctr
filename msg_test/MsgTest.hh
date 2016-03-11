@@ -5,7 +5,7 @@
 #include "ctr/MsgService.hh"
 #include "soil/STimer.hh"
 
-class MsgTest
+class MsgTest : public ctr::MsgCallback
 {
  public:
   MsgTest();
@@ -13,6 +13,8 @@ class MsgTest
   virtual ~MsgTest();
 
   void run();
+
+  virtual void msgCallback(const json::Document* doc);
 
  protected:
   

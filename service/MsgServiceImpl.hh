@@ -4,21 +4,17 @@
 #include "ctr/MsgService.hh"
 #include "HsUtil.hh"
 
-#include <thread>
-
 namespace ctr
 {
 
 class MsgOptions;
 
-class MsgServiceImpl : public MsgService, public MsgCallback
+class MsgServiceImpl : public MsgService
 {
  public:
-  MsgServiceImpl(soil::Options* options);
+  MsgServiceImpl(soil::Options* options, MsgCallback* callback);
 
   virtual ~MsgServiceImpl();
-
-  virtual void msgCallback(const json::Document*);
 
  protected:
 
@@ -31,6 +27,8 @@ class MsgServiceImpl : public MsgService, public MsgCallback
   MsgOptions* options_;
 
   std::unique_ptr<HsUtil> hs_util_;
+
+  MsgCallback* callback_;
 
 };
 
