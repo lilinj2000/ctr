@@ -20,10 +20,13 @@ HsUtil::HsUtil(const std::string& hs_config):
 HsUtil::~HsUtil()
 {
   CTR_TRACE <<"HsUtil::~HsUtil()";
+
+  stopMsgProcess();
   
   if( hs_handle_ )
   {
     CITICs_HsHlp_DisConnect( hs_handle_ );
+    
     CITICs_HsHlp_Exit( hs_handle_ );
   }
   
@@ -67,28 +70,34 @@ void HsUtil::setValue(const std::string& name, const std::string& value)
 
 void HsUtil::startMsgProcess(MsgCallback* callback, int issue_type, int timeout)
 {
-  msg_ctrl_.reset( new MSG_CTRL() );
+  if( !msg_run_ )
+  {
+    msg_ctrl_.reset( new MSG_CTRL() );
 
-  msg_ctrl_->nIssueType = issue_type;
+    msg_ctrl_->nIssueType = issue_type;
 
-  timeout_ = timeout;
+    timeout_ = timeout;
 
-  cond_.reset( soil::STimer::create() );
+    cond_.reset( soil::STimer::create() );
 
-  msg_queue_.reset( new soil::MsgQueue<json::Document, MsgCallback>(callback) );
+    msg_queue_.reset( new soil::MsgQueue<json::Document, MsgCallback>(callback) );
 
-  msg_run_ = true;
+    msg_run_ = true;
 
-  msg_thread_.reset( new std::thread(&HsUtil::msgProcess, this) );
+    msg_thread_.reset( new std::thread(&HsUtil::msgProcess, this) );
+  }
 }
 
 void HsUtil::stopMsgProcess()
 {
-  msg_run_ = false;
+  if( msg_run_ )
+  {
+    msg_run_ = false;
 
-  cond_->notifyAll();
+    cond_->notifyAll();
 
-  msg_thread_->join();
+    msg_thread_->join();
+  }
 
 }
 
