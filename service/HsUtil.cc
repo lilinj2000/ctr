@@ -216,32 +216,14 @@ void HsUtil::fetchRspData(const std::string& rsp, json::Document& doc)
         CITICs_HsHlp_GetColName(hs_handle_,j, key);
         CITICs_HsHlp_GetValueByIndex(hs_handle_, j, value);
 
-        json::Value k;
-        k.SetString(key, strlen(key), allocator);
-          
-        json::Value v;
-        v.SetString(value, strlen(value), allocator);
-
-        o.AddMember(k, v, allocator);
+        json::addMember<const std::string&>(o, key, value, doc);
       }
 
-      json::Value rec_key;
-      rec_key.SetString( RECORD, strlen(RECORD), allocator);
-
-      json::Value obj( json::kObjectType );
-      obj.AddMember(rec_key, o, allocator);
-
-      array.PushBack(obj, allocator);
+      array.PushBack(o, allocator);
     }
   }
 
-  json::Value rsp_key;
-  rsp_key.SetString(rsp.data(), rsp.length(), allocator);
-
-
-  doc.SetObject();
-  doc.AddMember(rsp_key, array, allocator);
-
+  json::addMember(doc, rsp, array);
 }
 
 void HsUtil::fetchMsgData(json::Document& doc)
@@ -267,31 +249,14 @@ void HsUtil::fetchMsgData(json::Document& doc)
         CITICs_HsHlp_GetColName(hs_handle_,j, key, msg_ctrl_.get());
         CITICs_HsHlp_GetValueByIndex(hs_handle_, j, value, msg_ctrl_.get());
 
-        json::Value k;
-        k.SetString(key, strlen(key), allocator);
-          
-        json::Value v;
-        v.SetString(value, strlen(value), allocator);
-
-        o.AddMember(k, v, allocator);
+        json::addMember<const std::string&>(o, key, value, doc);
       }
 
-      json::Value rec_key;
-      rec_key.SetString( RECORD, strlen(RECORD), allocator);
-
-      json::Value obj( json::kObjectType );
-      obj.AddMember(rec_key, o, allocator);
-
-      array.PushBack(obj, allocator);
+      array.PushBack(o, allocator);
     }
   }
 
-  json::Value msg_key;
-  msg_key.SetString( MESSAGE, strlen(MESSAGE), allocator);
-
-  doc.SetObject();
-  doc.AddMember(msg_key, array, allocator);
-
+  json::addMember(doc, MESSAGE, array);
 }
 
 };
